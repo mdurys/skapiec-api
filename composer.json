@@ -1,0 +1,19 @@
+{
+    "name": "mdurys/skapiec-api",
+    "description": "Client for skapiec.pl API",
+    "keywords": ["skapiec.pl", "api"],
+    "authors": [
+        {
+            "name": "Michał Durys",
+            "email": "michal@durys.pl",
+            "homepage": "http://michal.durys.pl"
+        }
+    ],
+    "autoload": {
+        "psr-0": { "": "lib/" }
+    },
+    "require": {
+        "php": ">=5.3.0",
+        "ext-curl": "*"
+    }
+}
