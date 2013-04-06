@@ -3,10 +3,14 @@
 namespace mdurys\SkapiecAPI;
 
 /**
+ * Client for accessing skapiec.pl API.
+ *
  * @author Michał Durys <michal@durys.pl>
+ * @package SkapiecAPI
  *
  * @method mixed meta_whoAmI()
  * @method mixed meta_availableServices()
+ * @method mixed beta_listProducts(int $category)
  */
 class Client
 {
@@ -23,16 +27,6 @@ class Client
     const PHOTO_SIZE_SMALL = 2;
     const PHOTO_SIZE_NORMAL = 3;
 
-    /**
-     * @var string API user name.
-     */
-    protected $apiUser;
-
-    /**
-     * @var string API password.
-     */
-    protected $apiPassword;
-
     protected $outputFormat = 'json';
 
     /**
@@ -46,7 +40,7 @@ class Client
     protected $timeout = 10;
 
     /**
-     * @var array 
+     * @var array Query parameters.
      */
     protected $queryParams = array();
 
@@ -69,38 +63,38 @@ class Client
      * @var array Known API methods and their required arguments.
      */
     private static $apiMethods = array(
-        'meta_whoAmI' => array(),
-        'meta_availableServices' => array(),
-        'beta_addOffer' => array('component', 'id_skapiec', 'url'),
-        'beta_getOffersBestPrice' => array(),
-        'beta_getOpinionsLatest' => array(),
-        'beta_getOpinionsBestValue' => array(),
-        'beta_listProducts' => array('category'),
-        'beta_rebindOffer' => array('component', 'id_skapiec'),
-        'beta_getFilters' => array('category'),
-        'beta_getFilterOptions' => array('filter'),
-        'beta_filterProducts' => array('filter', 'category'),
-        'beta_searchOffers' => array('q'),
-        'beta_listDepartments' => array(),
-        'beta_listCategories' => array('department'),
-        'beta_getDepartmentInfo' => array('id'),
-        'beta_getCategoryInfo' => array('id'),
-        'beta_getDealerInfo' => array('id'),
-        'beta_getDealerCategories' => array('id'),
-        'beta_getDealerOffers' => array('id'),
         'beta_addExpOpinion' => array('component_id_array', 'title', 'url', 'description'),
+        'beta_addOffer' => array('component', 'id_skapiec', 'url'),
         'beta_addOpinion' => array('component', 'ocena', 'description', 'category'),
-        'beta_listDealerProducts' => array('id'),
-        'beta_addToFavorites' => array('id'),
         'beta_addPriceAlert' => array(),
+        'beta_addToFavorites' => array('id'),
+        'beta_filterProducts' => array('filter', 'category'),
+        'beta_getCategoryInfo' => array('id'),
+        'beta_getDealerCategories' => array('id'),
+        'beta_getDealerInfo' => array('id'),
+        'beta_getDealerOffers' => array('id'),
+        'beta_getDepartmentInfo' => array('id'),
+        'beta_getFilterOptions' => array('filter'),
+        'beta_getFilters' => array('category'),
+        'beta_getOffersBestPrice' => array(),
+        'beta_getOpinionsBestValue' => array(),
+        'beta_getOpinionsLatest' => array(),
+        'beta_getProductInfo' => array('id', 'category'),
         'beta_getProductMostPopular' => array(),
         'beta_getProductPhoto' => array('id', 'category'),
-        'beta_getProductInfo' => array('id', 'category'),
+        'beta_listCategories' => array('department'),
+        'beta_listDealerProducts' => array('id'),
+        'beta_listDepartments' => array(),
+        'beta_listNewProducts' => array(),
         'beta_listProducers' => array('category'),
         'beta_listProducersProducts' => array('producer', 'sort', 'amount'),
-        'beta_listNewProducts' => array(),
-        'beta_searchOffersFilters' => array('q'),
+        'beta_listProducts' => array('category'),
         'beta_multiSearch' => array('json'),
+        'beta_rebindOffer' => array('component', 'id_skapiec'),
+        'beta_searchOffers' => array('q'),
+        'beta_searchOffersFilters' => array('q'),
+        'meta_availableServices' => array(),
+        'meta_whoAmI' => array(),
         );
 
     public function __construct($apiUser, $apiPassword)
@@ -111,7 +105,7 @@ class Client
         $this->curlHandle = curl_init();
         curl_setopt_array($this->curlHandle, array(
             CURLOPT_USERAGENT => 'SkapiecApiClient.php',
-            CURLOPT_USERPWD => $this->apiUser . ':' . $this->apiPassword,
+            CURLOPT_USERPWD => $apiUser . ':' . $apiPassword,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_TIMEOUT => $this->timeout));
     }
@@ -186,11 +180,6 @@ class Client
     {
         $this->queryParams['id_skapiec'] => $idSkapiec;
         return $this->__call('beta_getOffersBestPrice', array());
-    }
-
-    public function beta_listProducts($categoryId)
-    {
-        return $this->__call(__FUNCTION__, array('category' => $categoryId));
     }
 */
     public function onlyField()
