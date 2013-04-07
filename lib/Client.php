@@ -109,9 +109,6 @@ class Client
 
     public function __construct($apiUser, $apiPassword)
     {
-        $this->apiUser = $apiUser;
-        $this->apiPassword = $apiPassword;
-
         $this->curlHandle = curl_init();
         curl_setopt_array($this->curlHandle, array(
             CURLOPT_USERAGENT => 'SkapiecApiClient.php',
