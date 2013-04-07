@@ -65,7 +65,7 @@ class Client
     protected $lastMicrotime;
 
     /**
-     * @var int Delay in seconds between API calls.
+     * @var float Delay in seconds between API calls.
      */
     protected $queryDelay = 0.0;
 
