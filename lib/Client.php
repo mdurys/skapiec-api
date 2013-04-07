@@ -60,6 +60,16 @@ class Client
     protected $lastResult;
 
     /**
+     * @var int Last time (with microseconds) an API call was executed.
+     */
+    protected $lastMicrotime;
+
+    /**
+     * @var int Delay in seconds between API calls.
+     */
+    protected $queryDelay = 0.0;
+
+    /**
      * @var array Known API methods and their required arguments.
      */
     private static $apiMethods = array(
@@ -147,15 +157,30 @@ class Client
                 // add method parameters to query
                 $this->queryParams += array_combine(self::$apiMethods[$name], $arguments);
             }
+
+            // build query URL
             $url = 'http://' . self::API_HOST . '/' . $name . '.' . $this->outputFormat;
             if (!empty($this->queryParams))
             {
                 $url .= '?' . http_build_query($this->queryParams);
                 $this->queryParams = array();
             }
+
+            // check if we need to pause execution
+            if ($this->queryDelay && $this->lastMicrotime)
+            {
+                $timeElapsed = microtime(true) - $this->lastMicrotime;
+                if ($timeElapsed < $this->queryDelay)
+                {
+                    usleep(intval(($this->queryDelay - $timeElapsed) * 1000000));
+                }
+            }
+
+            // at this point we're ready to make a call
             curl_setopt($this->curlHandle, CURLOPT_URL, $url);
             $this->lastUrl = $url;
             $this->lastResult = curl_exec($this->curlHandle);
+            $this->lastMicrotime = microtime(true);
             $this->lastCode = curl_getinfo($this->curlHandle, CURLINFO_HTTP_CODE);
             if ($this->lastCode != 200)
             {
@@ -228,6 +253,18 @@ class Client
     public function getLastResult()
     {
         return $this->lastResult;
+    }
+
+    /**
+     * Set required delay betweeen subsequent API calls. Setting delay to 0
+     * disables checking of delay.
+     *
+     * @param integer $seconds Delay in seconds.
+     */
+    public function setQueryDelay($seconds)
+    {
+        $this->queryDelay = $seconds;
+        return $this;
     }
 
     /**
