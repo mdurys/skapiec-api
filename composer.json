@@ -11,7 +11,6 @@
     ],
     "autoload": {
         "classmap": ["lib/"]
-//        "psr-0": { "mdurys\\SkapiecAPI": "lib/" }
     },
     "require": {
         "php": ">=5.3.0",
