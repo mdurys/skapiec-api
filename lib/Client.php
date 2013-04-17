@@ -204,18 +204,42 @@ class Client
         return $this->__call('beta_getOffersBestPrice', array());
     }
 */
+    /**
+     * Set which data fields are to be returned by API call.
+     *
+     * The method accepts variable number of arguments.
+     *
+     * @param string $name,... Field name.
+     * @return \mdurys\SkapiecAPI\Client
+     */
     public function onlyField()
     {
         $this->queryParams['onlyField'] = implode(',', func_get_args());
         return $this;
     }
 
+    /**
+     * Add data fields to the default ones that are to be returned by API call.
+     *
+     * The method accepts variable number of arguments.
+     *
+     * @param string $name,... Field name.
+     * @return \mdurys\SkapiecAPI\Client
+     */
     public function includeField()
     {
         $this->queryParams['includeField'] = implode(',', func_get_args());
         return $this;
     }
 
+    /**
+     * Remove data fields from the default ones that are to be returned by API call.
+     *
+     * The method accepts variable number of arguments.
+     *
+     * @param string $name,... Field name.
+     * @return \mdurys\SkapiecAPI\Client
+     */
     public function excludeField()
     {
         $this->queryParams['excludeField'] = implode(',', func_get_args());
