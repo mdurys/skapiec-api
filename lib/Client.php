@@ -163,38 +163,51 @@ class Client
                 $this->queryParams = array();
             }
 
-            // check if we need to pause execution
-            if ($this->queryDelay && $this->lastMicrotime)
-            {
-                $timeElapsed = microtime(true) - $this->lastMicrotime;
-                if ($timeElapsed < $this->queryDelay)
-                {
-                    usleep(intval(($this->queryDelay - $timeElapsed) * 1000000));
-                }
-            }
-
             // at this point we're ready to make a call
-            curl_setopt($this->curlHandle, CURLOPT_URL, $url);
-            $this->lastUrl = $url;
-            $this->lastResult = curl_exec($this->curlHandle);
-            $this->lastMicrotime = microtime(true);
-            $this->lastCode = curl_getinfo($this->curlHandle, CURLINFO_HTTP_CODE);
-            if ($this->lastCode != 200)
-            {
-                throw new \Exception($this->lastResult, $this->lastCode);
-            }
-
-            switch ($this->outputFormat)
-            {
-                case 'json':
-                    return json_decode($this->lastResult, true);
-//                  return json_decode($this->lastResult, false);
-                case 'xml':
-                    return simplexml_load_string($this->lastResult);
-            }
+            return $this->query($url);
         }
 
         throw new \BadMethodCallException('Tried to call unknown method ' . get_class($this) . '::' . $name);
+    }
+
+    /**
+     * Execute Skapiec API query and return its result.
+     *
+     * @param string $url
+     * @return mixed
+     * @throws \Exception
+     */
+    public function query($url)
+    {
+        // check if we need to pause execution
+        if ($this->queryDelay && $this->lastMicrotime)
+        {
+            $timeElapsed = microtime(true) - $this->lastMicrotime;
+            if ($timeElapsed < $this->queryDelay)
+            {
+                usleep(intval(($this->queryDelay - $timeElapsed) * 1000000));
+            }
+        }
+
+        // make query
+        curl_setopt($this->curlHandle, CURLOPT_URL, $url);
+        $this->lastUrl = $url;
+        $this->lastResult = curl_exec($this->curlHandle);
+        $this->lastMicrotime = microtime(true);
+        $this->lastCode = curl_getinfo($this->curlHandle, CURLINFO_HTTP_CODE);
+        if ($this->lastCode != 200)
+        {
+            throw new \Exception($this->lastResult, $this->lastCode);
+        }
+
+        switch ($this->outputFormat)
+        {
+            case 'json':
+                return json_decode($this->lastResult, true);
+//                return json_decode($this->lastResult, false);
+            case 'xml':
+                return simplexml_load_string($this->lastResult);
+        }
     }
 
 /*
