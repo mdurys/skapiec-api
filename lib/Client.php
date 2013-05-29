@@ -71,6 +71,13 @@ class Client
 
     /**
      * @var array Known API methods and their required arguments.
+     *
+     * Some API methods have mutually exclusive required parameters, e.g.
+     * beta_getOffersBestPrice() requires either component id or skapiec id.
+     * Such methods are not given any required parameters in the array below.
+     * Instead wrapper methods are created, e.g.
+     * beta_getOffersBestPriceBySkapiecId($skapiecId) and
+     * beta_getOffersBestPriceByComponent($component).
      */
     private static $apiMethods = array(
         'beta_addExpOpinion' => array('component_id_array', 'title', 'url', 'description'),
@@ -210,13 +217,34 @@ class Client
         }
     }
 
-/*
+    /**
+     * Get best offers for given product.
+     *
+     * Wrapper for beta_getOffersBestPrice().
+     *
+     * @param integer|array $idSkapiec
+     * @return mixed
+     */
     public function beta_getOffersBestPriceBySkapiecId($idSkapiec)
     {
-        $this->queryParams['id_skapiec'] => $idSkapiec;
+        $this->queryParams['id_skapiec'] = $idSkapiec;
         return $this->__call('beta_getOffersBestPrice', array());
     }
-*/
+
+    /**
+     * Get best offers for given product.
+     *
+     * Wrapper for beta_getOffersBestPrice().
+     *
+     * @param integer|array $component
+     * @return mixed
+     */
+    public function beta_getOffersBestPriceByComponent($component)
+    {
+        $this->queryParams['component'] = $component;
+        return $this->__call('beta_getOffersBestPrice', array());
+    }
+
     /**
      * Set which data fields are to be returned by API call.
      *
