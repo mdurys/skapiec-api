@@ -246,6 +246,90 @@ class Client
     }
 
     /**
+     * Get best user reviews for given product.
+     *
+     * Wrapper for beta_getOpinionsBestValue().
+     *
+     * @param integer|array $idSkapiec
+     * @return mixed
+     */
+    public function beta_getOpinionsBestValueBySkapiecId($idSkapiec)
+    {
+        $this->queryParams['id_skapiec'] = $idSkapiec;
+        return $this->__call('beta_getOpinionsBestValue', array());
+    }
+
+    /**
+     * Get best user reviews for given product.
+     *
+     * Wrapper for beta_getOpinionsBestValue().
+     *
+     * @param integer|array $component
+     * @return mixed
+     */
+    public function beta_getOpinionsBestValueByComponent($component)
+    {
+        $this->queryParams['component'] = $component;
+        return $this->__call('beta_getOpinionsBestValue', array());
+    }
+
+    /**
+     * Get latest user reviews for given product.
+     *
+     * Wrapper for beta_getOpinionsLatest().
+     *
+     * @param integer|array $idSkapiec
+     * @return mixed
+     */
+    public function beta_getOpinionsLatestBySkapiecId($idSkapiec)
+    {
+        $this->queryParams['id_skapiec'] = $idSkapiec;
+        return $this->__call('beta_getOpinionsLatest', array());
+    }
+
+    /**
+     * Get latest user reviews for given product.
+     *
+     * Wrapper for beta_getOpinionsLatest().
+     *
+     * @param integer|array $component
+     * @return mixed
+     */
+    public function beta_getOpinionsLatestByComponent($component)
+    {
+        $this->queryParams['component'] = $component;
+        return $this->__call('beta_getOpinionsLatest', array());
+    }
+
+    /**
+     * List most popular products from given department.
+     *
+     * Wrapper for beta_getProductMostPopular().
+     *
+     * @param integer $department
+     * @return mixed
+     */
+    public function beta_getProductMostPopularByDepartment($department)
+    {
+        $this->queryParams['department'] = $department;
+        return $this->__call('beta_getProductMostPopular', array());
+    }
+
+    /**
+     * List most popular products from given category.
+     *
+     * Wrapper for beta_getProductMostPopular().
+     *
+     * @param integer $category
+     * @return mixed
+     */
+    public function beta_getProductMostPopularByCategory($category)
+    {
+        $this->queryParams['category'] = $idSkapiec;
+        return $this->__call('beta_getProductMostPopular', array());
+    }
+
+    /**
      * Set which data fields are to be returned by API call.
      *
      * The method accepts variable number of arguments.
