@@ -325,7 +325,7 @@ class Client
      */
     public function beta_getProductMostPopularByCategory($category)
     {
-        $this->queryParams['category'] = $idSkapiec;
+        $this->queryParams['category'] = $category;
         return $this->__call('beta_getProductMostPopular', array());
     }
 
