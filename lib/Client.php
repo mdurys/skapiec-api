@@ -27,6 +27,11 @@ class Client
     const PHOTO_SIZE_SMALL = 2;
     const PHOTO_SIZE_NORMAL = 3;
 
+    /**
+     * Maximal number of records requested in one API call.
+     */
+    const MAX_AMOUNT = 20;
+
     protected $outputFormat = 'json';
 
     /**
