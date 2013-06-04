@@ -187,7 +187,7 @@ class Client
      *
      * @param string $url
      * @return mixed
-     * @throws \Exception
+     * @throws \RuntimeException
      */
     public function query($url)
     {
@@ -209,7 +209,7 @@ class Client
         $this->lastCode = curl_getinfo($this->curlHandle, CURLINFO_HTTP_CODE);
         if ($this->lastCode != 200)
         {
-            throw new \Exception($this->lastResult, $this->lastCode);
+            throw new \RuntimeException($this->lastResult, $this->lastCode);
         }
 
         switch ($this->outputFormat)
