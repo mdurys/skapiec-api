@@ -119,6 +119,12 @@ class Client
         'meta_whoAmI' => array(),
         );
 
+    /**
+     * Create new Client object.
+     *
+     * @param string $apiUser
+     * @param string $apiPassword
+     */
     public function __construct($apiUser, $apiPassword)
     {
         $this->curlHandle = curl_init();
@@ -129,6 +135,9 @@ class Client
             CURLOPT_TIMEOUT => $this->timeout));
     }
 
+    /**
+     * Destroy object and free allocated resources.
+     */
     public function __destruct()
     {
         if ($this->curlHandle)
