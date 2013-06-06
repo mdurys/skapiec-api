@@ -107,7 +107,7 @@ class Client
         'beta_listCategories' => array('department'),
         'beta_listDealerProducts' => array('id'),
         'beta_listDepartments' => array(),
-        'beta_listNewProducts' => array(),
+        'beta_listNewProducts' => array('category'),
         'beta_listProducers' => array('category'),
         'beta_listProducersProducts' => array('producer', 'sort', 'amount'),
         'beta_listProducts' => array('category'),
