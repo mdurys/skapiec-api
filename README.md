@@ -53,10 +53,16 @@ Each of these methods accepts variable number of arguments.
 
 Example:
 
-    $result = $this->api
+    $result = $api
         ->onlyField('name', 'vendor', 'model')
         ->setFromTime(time() - 86400)
         ->beta_listNewProducts($categoryId);
+
+Skapiec.pl imposes limits on number of API calls within certain time. To assure
+that limits are not exceeded one can use `setQueryDelay()` method. For example,
+to wait a quater of a second between subsequent API calls use this code:
+
+    $api->setQueryDelay(0.25);
 
 Bugs
 ----
