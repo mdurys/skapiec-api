@@ -8,7 +8,7 @@ Installation
 
 Using Composer:
 
-    composer.phar require mdurys/skapiec=dev-master
+    composer.phar require mdurys/skapiec-api=dev-master
 
 Usage
 -----
@@ -43,3 +43,24 @@ products from a category with `offset` and `amount` arguments one should call:
         ->setAmount($amount)
         ->setOffset($offset)
         ->beta_listProducts($categoryId);
+
+With majority of functions that return information about a product or a category
+one can select which fields to populate. This can be done using three methods:
+- `onlyField()` - Only indicated fields will be included in the result.
+- `includeField()` - Adds indicated fields to the ones returned by default.
+- `excludeField()` - Excludes indicated fields from the ones returned by default.
+Each of these methods accepts variable number of arguments.
+
+Example:
+
+    $result = $this->api
+        ->onlyField('name', 'vendor', 'model')
+        ->setFromTime(time() - 86400)
+        ->beta_listNewProducts($categoryId);
+
+Bugs
+----
+
+`beta_getProductMostPopular()` doesn't accept 0 as a valid offset. It's a
+problem on the API side. It's already reported to Skapiec.pl and hopefully it'll
+be fixed sooner than later.
