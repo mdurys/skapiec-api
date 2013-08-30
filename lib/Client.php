@@ -320,6 +320,10 @@ class Client
      *
      * Wrapper for beta_getProductMostPopular().
      *
+     * There is a bug in beta_getProductMostPopular(), namely it doesn't accept
+     * offset=0 as valid parameter. This error was reported to Skapiec but
+     * hasn't been fixed so far.
+     *
      * @param integer $department
      * @return mixed
      */
@@ -333,6 +337,10 @@ class Client
      * List most popular products from given category.
      *
      * Wrapper for beta_getProductMostPopular().
+     *
+     * There is a bug in beta_getProductMostPopular(), namely it doesn't accept
+     * offset=0 as valid parameter. This error was reported to Skapiec but
+     * hasn't been fixed so far.
      *
      * @param integer $category
      * @return mixed
