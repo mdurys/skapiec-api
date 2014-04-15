@@ -466,6 +466,26 @@ class Client
     }
 
     /**
+     * Set desired output format, JSON or XML. API calls return data in this
+     * format.
+     *
+     * @param string $format 'json' or 'xml'
+     * @throws \InvalidArgumentException
+     */
+    public function setOutputFormat($format)
+    {
+        switch ($format)
+        {
+            case 'xml':
+            case 'json':
+                $this->outputFormat = $format;
+                break;
+            default:
+                throw new \InvalidArgumentException($format . ' is not a valid output format');
+        }
+    }
+
+    /**
      * Convert string in camelCase to underscore_notation.
      *
      * @param string $string
