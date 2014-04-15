@@ -181,6 +181,7 @@ class Client
      * @param string $name Name of called method.
      * @param array $arguments Method arguments.
      * @return mixed
+     * @throws \BadMethodCallException
      */
     public function __call($name, $arguments)
     {
