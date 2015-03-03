@@ -12,7 +12,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "MDurys\\SkapiecAPI": "lib/"
+            "MDurys\\SkapiecAPI\\": "lib/"
         }
     },
     "require": {
