@@ -15,7 +15,7 @@ Usage
 
 Creating API client object:
 
-    $api = new mdurys\SkapiecAPI\Client($username, $password);
+    $api = new MDurys\SkapiecAPI\Client($username, $password);
 
 The library maps most of the API functions directly to class methods. For
 example, API's `beta_listDepartments()` function is called like this:
