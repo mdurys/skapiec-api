@@ -226,7 +226,7 @@ class Client
      *
      * @param string $url
      * @return mixed
-     * @throws \RuntimeException
+     * @throws \MDurys\SkapiecAPI\Exception
      */
     public function query($url)
     {
@@ -248,7 +248,9 @@ class Client
         $this->lastCode = curl_getinfo($this->curlHandle, CURLINFO_HTTP_CODE);
         if ($this->lastCode != 200)
         {
-            throw new \RuntimeException($this->lastResult, $this->lastCode);
+            $e = new Exception($this->lastResult, $this->lastCode);
+            $e->setUrl($url);
+            throw $e;
         }
 
         switch ($this->outputFormat)
