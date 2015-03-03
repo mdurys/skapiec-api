@@ -1,6 +1,6 @@
 <?php
 
-namespace mdurys\SkapiecAPI;
+namespace MDurys\SkapiecAPI;
 
 /**
  * Client for accessing skapiec.pl API.
