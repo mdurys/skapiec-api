@@ -1,4 +1,4 @@
-skapiec-api
+skapiec-api [![Build Status](https://travis-ci.org/mdurys/skapiec-api.svg?branch=master)](https://travis-ci.org/mdurys/skapiec-api)
 ===========
 
 Library for accessing Skąpiec.pl API. See http://api.skapiec.pl for more details.
@@ -70,5 +70,3 @@ Bugs
 `beta_getProductMostPopular()` doesn't accept 0 as a valid offset. It's a
 problem on the API side. It's already reported to Skapiec.pl and hopefully it'll
 be fixed sooner than later.
-
-[![Build Status](https://travis-ci.org/mdurys/skapiec-api.svg?branch=master)](https://travis-ci.org/mdurys/skapiec-api)
