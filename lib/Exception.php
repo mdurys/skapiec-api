@@ -12,15 +12,10 @@ class Exception extends \Exception
 {
     private $url;
 
-    /**
-     * Set URL used to make API call that caused exception.
-     *
-     * @param string $url
-     */
-    public function setUrl($url)
+    public function __construct($message = null, $code, \Exception $previous = null, $url = null)
     {
         $this->url = $url;
-        return $this;
+        parent::__construct($message, $code, $previous);
     }
 
     /**

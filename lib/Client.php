@@ -246,11 +246,13 @@ class Client
         $this->lastResult = curl_exec($this->curlHandle);
         $this->lastMicrotime = microtime(true);
         $this->lastCode = curl_getinfo($this->curlHandle, CURLINFO_HTTP_CODE);
+        if (false === $this->lastResult)
+        {
+            throw new Exception(curl_error($this->curlHandle), $this->lastCode, null, $url);
+        }
         if ($this->lastCode != 200)
         {
-            $e = new Exception($this->lastResult, $this->lastCode);
-            $e->setUrl($url);
-            throw $e;
+            throw new Exception($this->lastResult, $this->lastCode, null, $url);
         }
 
         switch ($this->outputFormat)
