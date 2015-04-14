@@ -3,6 +3,7 @@
     "license": "MIT",
     "description": "Client for skapiec.pl API",
     "keywords": ["skapiec.pl", "api"],
+    "homepage": "https://github.com/mdurys/skapiec-api",
     "authors": [
         {
             "name": "Michał Durys",
