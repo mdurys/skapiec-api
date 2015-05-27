@@ -6,7 +6,6 @@ namespace MDurys\SkapiecAPI;
  * Exception thrown by Client::query() method.
  *
  * @author Michał Durys <michal@durys.pl>
- * @package SkapiecAPI
  */
 class Exception extends \Exception
 {
