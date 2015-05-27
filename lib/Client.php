@@ -263,6 +263,8 @@ class Client
             case 'xml':
                 return simplexml_load_string($this->lastResult);
         }
+
+        return $this->lastResult;
     }
 
     /**
@@ -354,9 +356,9 @@ class Client
      *
      * Wrapper for beta_getProductMostPopular().
      *
-     * There is a bug in beta_getProductMostPopular(), namely it doesn't accept
+     * There is a bug in beta_getProductMostPopular(), namely it does not accept
      * offset=0 as valid parameter. This error was reported to Skapiec but
-     * hasn't been fixed so far.
+     * has not been fixed so far.
      *
      * @param integer $department
      * @return mixed
@@ -372,9 +374,9 @@ class Client
      *
      * Wrapper for beta_getProductMostPopular().
      *
-     * There is a bug in beta_getProductMostPopular(), namely it doesn't accept
+     * There is a bug in beta_getProductMostPopular(), namely it does not accept
      * offset=0 as valid parameter. This error was reported to Skapiec but
-     * hasn't been fixed so far.
+     * has not been fixed so far.
      *
      * @param integer $category
      * @return mixed
@@ -390,7 +392,7 @@ class Client
      *
      * The method accepts variable number of arguments.
      *
-     * @param string $name,... Field name.
+     * @param string ...$name Field name.
      * @return \mdurys\SkapiecAPI\Client
      */
     public function onlyField()
@@ -404,7 +406,7 @@ class Client
      *
      * The method accepts variable number of arguments.
      *
-     * @param string $name,... Field name.
+     * @param string ...$name Field name.
      * @return \mdurys\SkapiecAPI\Client
      */
     public function includeField()
@@ -418,7 +420,7 @@ class Client
      *
      * The method accepts variable number of arguments.
      *
-     * @param string $name,... Field name.
+     * @param string ...$name Field name.
      * @return \mdurys\SkapiecAPI\Client
      */
     public function excludeField()
@@ -458,10 +460,12 @@ class Client
     }
 
     /**
-     * Set required delay betweeen subsequent API calls. Setting delay to 0
+     * Set required delay between subsequent API calls. Setting delay to 0
      * disables checking of delay.
      *
      * @param integer $seconds Delay in seconds.
+     *
+     * @return $this
      */
     public function setQueryDelay($seconds)
     {
