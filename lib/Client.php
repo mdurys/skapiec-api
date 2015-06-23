@@ -6,7 +6,6 @@ namespace MDurys\SkapiecAPI;
  * Client for accessing skapiec.pl API.
  *
  * @author Michał Durys <michal@durys.pl>
- * @package SkapiecAPI
  *
  * @method mixed beta_addExpOpinion' => array(array $component_id_array, string $title, string $url, string $description)
  * @method mixed beta_addOffer(string $component, int $id_skapiec, string $url)
@@ -49,7 +48,7 @@ class Client
     const API_HOST = 'api.skapiec.pl';
 
     /**
-     * Image size IDs for beta_getProductPhoto()
+     * Image size IDs for beta_getProductPhoto().
      */
     const PHOTO_SIZE_ALL = 0;
     const PHOTO_SIZE_XSMALL = 1;
@@ -159,9 +158,9 @@ class Client
         $this->curlHandle = curl_init();
         curl_setopt_array($this->curlHandle, array(
             CURLOPT_USERAGENT => 'SkapiecApiClient.php',
-            CURLOPT_USERPWD => $apiUser . ':' . $apiPassword,
+            CURLOPT_USERPWD => $apiUser.':'.$apiPassword,
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT => $this->timeout));
+            CURLOPT_TIMEOUT => $this->timeout, ));
     }
 
     /**
@@ -169,8 +168,7 @@ class Client
      */
     public function __destruct()
     {
-        if ($this->curlHandle)
-        {
+        if ($this->curlHandle) {
             curl_close($this->curlHandle);
         }
     }
@@ -178,39 +176,37 @@ class Client
     /**
      * Handle virtual API methods: meta_*, beta_* and set*.
      *
-     * @param string $name Name of called method.
-     * @param array $arguments Method arguments.
+     * @param string $name      Name of called method.
+     * @param array  $arguments Method arguments.
+     *
      * @return mixed
+     *
      * @throws \BadMethodCallException
      */
     public function __call($name, $arguments)
     {
         // handle setXXX methods which set query parameters
-        if (strncmp('set', $name, 3) == 0)
-        {
+        if (strncmp('set', $name, 3) == 0) {
             $this->queryParams[self::camelcaseToUnderscore(substr($name, 3))] = current($arguments);
+
             return $this;
         }
         // handle API methods
-        else if (in_array($name, array_keys(self::$apiMethods)))
-        {
+        elseif (in_array($name, array_keys(self::$apiMethods))) {
             // check if this method has any required parameters
-            if (!empty(self::$apiMethods[$name]))
-            {
+            if (!empty(self::$apiMethods[$name])) {
                 // make sure that number of parameters is correct
-                if (count(self::$apiMethods[$name]) <> count($arguments))
-                {
-                    throw new \BadMethodCallException(get_class($this) . '::' . $name . ' requires ' . count(self::$apiMethods[$name]) . ' argument(s)');
+                if (count(self::$apiMethods[$name]) != count($arguments)) {
+                    throw new \BadMethodCallException(get_class($this).'::'.$name.' requires '.count(self::$apiMethods[$name]).' argument(s)');
                 }
                 // add method parameters to query
                 $this->queryParams += array_combine(self::$apiMethods[$name], $arguments);
             }
 
             // build query URL
-            $url = 'http://' . self::API_HOST . '/' . $name . '.' . $this->outputFormat;
-            if (!empty($this->queryParams))
-            {
-                $url .= '?' . http_build_query($this->queryParams);
+            $url = 'http://'.self::API_HOST.'/'.$name.'.'.$this->outputFormat;
+            if (!empty($this->queryParams)) {
+                $url .= '?'.http_build_query($this->queryParams);
                 $this->queryParams = array();
             }
 
@@ -218,24 +214,24 @@ class Client
             return $this->query($url);
         }
 
-        throw new \BadMethodCallException('Tried to call unknown method ' . get_class($this) . '::' . $name);
+        throw new \BadMethodCallException('Tried to call unknown method '.get_class($this).'::'.$name);
     }
 
     /**
      * Execute Skapiec API query and return its result.
      *
      * @param string $url
+     *
      * @return mixed
+     *
      * @throws \MDurys\SkapiecAPI\Exception
      */
     public function query($url)
     {
         // check if we need to pause execution
-        if ($this->queryDelay && $this->lastMicrotime)
-        {
+        if ($this->queryDelay && $this->lastMicrotime) {
             $timeElapsed = microtime(true) - $this->lastMicrotime;
-            if ($timeElapsed < $this->queryDelay)
-            {
+            if ($timeElapsed < $this->queryDelay) {
                 usleep(intval(($this->queryDelay - $timeElapsed) * 1000000));
             }
         }
@@ -246,23 +242,22 @@ class Client
         $this->lastResult = curl_exec($this->curlHandle);
         $this->lastMicrotime = microtime(true);
         $this->lastCode = curl_getinfo($this->curlHandle, CURLINFO_HTTP_CODE);
-        if (false === $this->lastResult)
-        {
+        if (false === $this->lastResult) {
             throw new Exception(curl_error($this->curlHandle), $this->lastCode, null, $url);
         }
-        if ($this->lastCode != 200)
-        {
+        if ($this->lastCode != 200) {
             throw new Exception($this->lastResult, $this->lastCode, null, $url);
         }
 
-        switch ($this->outputFormat)
-        {
+        switch ($this->outputFormat) {
             case 'json':
                 return json_decode($this->lastResult, true);
 //                return json_decode($this->lastResult, false);
             case 'xml':
                 return simplexml_load_string($this->lastResult);
         }
+
+        return $this->lastResult;
     }
 
     /**
@@ -270,12 +265,14 @@ class Client
      *
      * Wrapper for beta_getOffersBestPrice().
      *
-     * @param integer|array $idSkapiec
+     * @param int|array $idSkapiec
+     *
      * @return mixed
      */
     public function beta_getOffersBestPriceBySkapiecId($idSkapiec)
     {
         $this->queryParams['id_skapiec'] = $idSkapiec;
+
         return $this->__call('beta_getOffersBestPrice', array());
     }
 
@@ -284,12 +281,14 @@ class Client
      *
      * Wrapper for beta_getOffersBestPrice().
      *
-     * @param integer|array $component
+     * @param int|array $component
+     *
      * @return mixed
      */
     public function beta_getOffersBestPriceByComponent($component)
     {
         $this->queryParams['component'] = $component;
+
         return $this->__call('beta_getOffersBestPrice', array());
     }
 
@@ -298,12 +297,14 @@ class Client
      *
      * Wrapper for beta_getOpinionsBestValue().
      *
-     * @param integer|array $idSkapiec
+     * @param int|array $idSkapiec
+     *
      * @return mixed
      */
     public function beta_getOpinionsBestValueBySkapiecId($idSkapiec)
     {
         $this->queryParams['id_skapiec'] = $idSkapiec;
+
         return $this->__call('beta_getOpinionsBestValue', array());
     }
 
@@ -312,12 +313,14 @@ class Client
      *
      * Wrapper for beta_getOpinionsBestValue().
      *
-     * @param integer|array $component
+     * @param int|array $component
+     *
      * @return mixed
      */
     public function beta_getOpinionsBestValueByComponent($component)
     {
         $this->queryParams['component'] = $component;
+
         return $this->__call('beta_getOpinionsBestValue', array());
     }
 
@@ -326,12 +329,14 @@ class Client
      *
      * Wrapper for beta_getOpinionsLatest().
      *
-     * @param integer|array $idSkapiec
+     * @param int|array $idSkapiec
+     *
      * @return mixed
      */
     public function beta_getOpinionsLatestBySkapiecId($idSkapiec)
     {
         $this->queryParams['id_skapiec'] = $idSkapiec;
+
         return $this->__call('beta_getOpinionsLatest', array());
     }
 
@@ -340,12 +345,14 @@ class Client
      *
      * Wrapper for beta_getOpinionsLatest().
      *
-     * @param integer|array $component
+     * @param int|array $component
+     *
      * @return mixed
      */
     public function beta_getOpinionsLatestByComponent($component)
     {
         $this->queryParams['component'] = $component;
+
         return $this->__call('beta_getOpinionsLatest', array());
     }
 
@@ -354,16 +361,18 @@ class Client
      *
      * Wrapper for beta_getProductMostPopular().
      *
-     * There is a bug in beta_getProductMostPopular(), namely it doesn't accept
+     * There is a bug in beta_getProductMostPopular(), namely it does not accept
      * offset=0 as valid parameter. This error was reported to Skapiec but
-     * hasn't been fixed so far.
+     * has not been fixed so far.
      *
-     * @param integer $department
+     * @param int $department
+     *
      * @return mixed
      */
     public function beta_getProductMostPopularByDepartment($department)
     {
         $this->queryParams['department'] = $department;
+
         return $this->__call('beta_getProductMostPopular', array());
     }
 
@@ -372,16 +381,18 @@ class Client
      *
      * Wrapper for beta_getProductMostPopular().
      *
-     * There is a bug in beta_getProductMostPopular(), namely it doesn't accept
+     * There is a bug in beta_getProductMostPopular(), namely it does not accept
      * offset=0 as valid parameter. This error was reported to Skapiec but
-     * hasn't been fixed so far.
+     * has not been fixed so far.
      *
-     * @param integer $category
+     * @param int $category
+     *
      * @return mixed
      */
     public function beta_getProductMostPopularByCategory($category)
     {
         $this->queryParams['category'] = $category;
+
         return $this->__call('beta_getProductMostPopular', array());
     }
 
@@ -390,12 +401,14 @@ class Client
      *
      * The method accepts variable number of arguments.
      *
-     * @param string $name,... Field name.
+     * @param string ...$name Field name.
+     *
      * @return \mdurys\SkapiecAPI\Client
      */
     public function onlyField()
     {
         $this->queryParams['onlyField'] = implode(',', func_get_args());
+
         return $this;
     }
 
@@ -404,12 +417,14 @@ class Client
      *
      * The method accepts variable number of arguments.
      *
-     * @param string $name,... Field name.
+     * @param string ...$name Field name.
+     *
      * @return \mdurys\SkapiecAPI\Client
      */
     public function includeField()
     {
         $this->queryParams['includeField'] = implode(',', func_get_args());
+
         return $this;
     }
 
@@ -418,12 +433,14 @@ class Client
      *
      * The method accepts variable number of arguments.
      *
-     * @param string $name,... Field name.
+     * @param string ...$name Field name.
+     *
      * @return \mdurys\SkapiecAPI\Client
      */
     public function excludeField()
     {
         $this->queryParams['excludeField'] = implode(',', func_get_args());
+
         return $this;
     }
 
@@ -458,14 +475,17 @@ class Client
     }
 
     /**
-     * Set required delay betweeen subsequent API calls. Setting delay to 0
+     * Set required delay between subsequent API calls. Setting delay to 0
      * disables checking of delay.
      *
-     * @param integer $seconds Delay in seconds.
+     * @param int $seconds Delay in seconds.
+     *
+     * @return $this
      */
     public function setQueryDelay($seconds)
     {
         $this->queryDelay = $seconds;
+
         return $this;
     }
 
@@ -474,18 +494,18 @@ class Client
      * format.
      *
      * @param string $format 'json' or 'xml'
+     *
      * @throws \InvalidArgumentException
      */
     public function setOutputFormat($format)
     {
-        switch ($format)
-        {
+        switch ($format) {
             case 'xml':
             case 'json':
                 $this->outputFormat = $format;
                 break;
             default:
-                throw new \InvalidArgumentException($format . ' is not a valid output format');
+                throw new \InvalidArgumentException($format.' is not a valid output format');
         }
     }
 
@@ -493,6 +513,7 @@ class Client
      * Convert string in camelCase to underscore_notation.
      *
      * @param string $string
+     *
      * @return string
      */
     protected static function camelcaseToUnderscore($string)
