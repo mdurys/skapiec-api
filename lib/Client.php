@@ -39,9 +39,9 @@ namespace MDurys\SkapiecAPI;
  * @method mixed beta_searchOffersFilters(string $q)
  * @method mixed meta_whoAmI()
  * @method mixed meta_availableServices()
- * @method self setAmount($amount)
- * @method self setFromTime($timestamp)
- * @method self setOffset($offset)
+ * @method Client setAmount($amount)
+ * @method Client setFromTime($timestamp)
+ * @method Client setOffset($offset)
  */
 class Client
 {
@@ -84,7 +84,7 @@ class Client
     protected $queryParams = array();
 
     /**
-     * @var int Stores URL used to make last API call.
+     * @var string Stores URL used to make last API call.
      */
     protected $lastUrl;
 
@@ -94,7 +94,7 @@ class Client
     protected $lastCode;
 
     /**
-     * @var int Stores raw result returned by last API call.
+     * @var string Stores raw result returned by last API call.
      */
     protected $lastResult;
 
