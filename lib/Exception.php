@@ -9,8 +9,19 @@ namespace MDurys\SkapiecAPI;
  */
 class Exception extends \Exception
 {
+    /**
+     * @var string
+     */
     private $url;
 
+    /**
+     * Exception constructor.
+     *
+     * @param string | null     $message
+     * @param int               $code
+     * @param \Exception | null $previous
+     * @param string | null     $url
+     */
     public function __construct($message = null, $code, \Exception $previous = null, $url = null)
     {
         $this->url = $url;
