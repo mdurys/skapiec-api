@@ -39,6 +39,9 @@ namespace MDurys\SkapiecAPI;
  * @method mixed beta_searchOffersFilters(string $q)
  * @method mixed meta_whoAmI()
  * @method mixed meta_availableServices()
+ * @method Client setAmount($amount)
+ * @method Client setFromTime($timestamp)
+ * @method Client setOffset($offset)
  */
 class Client
 {
@@ -60,6 +63,9 @@ class Client
      */
     const MAX_AMOUNT = 20;
 
+    /**
+     * @var string
+     */
     protected $outputFormat = 'json';
 
     /**
@@ -78,7 +84,7 @@ class Client
     protected $queryParams = array();
 
     /**
-     * @var int Stores URL used to make last API call.
+     * @var string Stores URL used to make last API call.
      */
     protected $lastUrl;
 
@@ -88,7 +94,7 @@ class Client
     protected $lastCode;
 
     /**
-     * @var int Stores raw result returned by last API call.
+     * @var string Stores raw result returned by last API call.
      */
     protected $lastResult;
 
@@ -178,9 +184,7 @@ class Client
      *
      * @param string $name      Name of called method.
      * @param array  $arguments Method arguments.
-     *
      * @return mixed
-     *
      * @throws \BadMethodCallException
      */
     public function __call($name, $arguments)
@@ -221,10 +225,8 @@ class Client
      * Execute Skapiec API query and return its result.
      *
      * @param string $url
-     *
      * @return mixed
-     *
-     * @throws \MDurys\SkapiecAPI\Exception
+     * @throws Exception
      */
     public function query($url)
     {
@@ -252,7 +254,6 @@ class Client
         switch ($this->outputFormat) {
             case 'json':
                 return json_decode($this->lastResult, true);
-//                return json_decode($this->lastResult, false);
             case 'xml':
                 return simplexml_load_string($this->lastResult);
         }
@@ -266,7 +267,6 @@ class Client
      * Wrapper for beta_getOffersBestPrice().
      *
      * @param int|array $idSkapiec
-     *
      * @return mixed
      */
     public function beta_getOffersBestPriceBySkapiecId($idSkapiec)
@@ -282,7 +282,6 @@ class Client
      * Wrapper for beta_getOffersBestPrice().
      *
      * @param int|array $component
-     *
      * @return mixed
      */
     public function beta_getOffersBestPriceByComponent($component)
@@ -298,7 +297,6 @@ class Client
      * Wrapper for beta_getOpinionsBestValue().
      *
      * @param int|array $idSkapiec
-     *
      * @return mixed
      */
     public function beta_getOpinionsBestValueBySkapiecId($idSkapiec)
@@ -314,7 +312,6 @@ class Client
      * Wrapper for beta_getOpinionsBestValue().
      *
      * @param int|array $component
-     *
      * @return mixed
      */
     public function beta_getOpinionsBestValueByComponent($component)
@@ -330,7 +327,6 @@ class Client
      * Wrapper for beta_getOpinionsLatest().
      *
      * @param int|array $idSkapiec
-     *
      * @return mixed
      */
     public function beta_getOpinionsLatestBySkapiecId($idSkapiec)
@@ -346,7 +342,6 @@ class Client
      * Wrapper for beta_getOpinionsLatest().
      *
      * @param int|array $component
-     *
      * @return mixed
      */
     public function beta_getOpinionsLatestByComponent($component)
@@ -366,7 +361,6 @@ class Client
      * has not been fixed so far.
      *
      * @param int $department
-     *
      * @return mixed
      */
     public function beta_getProductMostPopularByDepartment($department)
@@ -386,7 +380,6 @@ class Client
      * has not been fixed so far.
      *
      * @param int $category
-     *
      * @return mixed
      */
     public function beta_getProductMostPopularByCategory($category)
@@ -402,8 +395,7 @@ class Client
      * The method accepts variable number of arguments.
      *
      * @param string ...$name Field name.
-     *
-     * @return \mdurys\SkapiecAPI\Client
+     * @return self
      */
     public function onlyField()
     {
@@ -418,8 +410,7 @@ class Client
      * The method accepts variable number of arguments.
      *
      * @param string ...$name Field name.
-     *
-     * @return \mdurys\SkapiecAPI\Client
+     * @return self
      */
     public function includeField()
     {
@@ -434,8 +425,7 @@ class Client
      * The method accepts variable number of arguments.
      *
      * @param string ...$name Field name.
-     *
-     * @return \mdurys\SkapiecAPI\Client
+     * @return self
      */
     public function excludeField()
     {
@@ -479,8 +469,7 @@ class Client
      * disables checking of delay.
      *
      * @param int $seconds Delay in seconds.
-     *
-     * @return $this
+     * @return self
      */
     public function setQueryDelay($seconds)
     {
@@ -494,7 +483,6 @@ class Client
      * format.
      *
      * @param string $format 'json' or 'xml'
-     *
      * @throws \InvalidArgumentException
      */
     public function setOutputFormat($format)
@@ -513,7 +501,6 @@ class Client
      * Convert string in camelCase to underscore_notation.
      *
      * @param string $string
-     *
      * @return string
      */
     protected static function camelcaseToUnderscore($string)

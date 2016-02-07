@@ -70,3 +70,7 @@ Bugs
 `beta_getProductMostPopular()` doesn't accept 0 as a valid offset. It's a
 problem on the API side. It's already reported to Skapiec.pl and hopefully it'll
 be fixed sooner than later.
+
+`beta_getDealerInfo()` can return empty result for valid shop IDs. Apparently
+this is ok with Skapiec, because shop information is maintained by shop iteself,
+not Skapiec and some shops do not provide that information.
